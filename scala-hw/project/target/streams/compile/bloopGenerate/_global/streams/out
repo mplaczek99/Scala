@@ -1,0 +1,4 @@
+[0m[[0m[0mdebug[0m] [0m[0m[scala-hw-build] Classpath dependencies List()[0m
+[0m[[0m[0mdebug[0m] [0m[0m[scala-hw-build] Dependencies from configurations List()[0m
+[0m[[0m[0mdebug[0m] [0m[0mBloop wrote the configuration of project 'scala-hw-build' to '/home/mplaczek/Documents/Classes/CSC447/Scala/scala-hw/project/.bloop/scala-hw-build.json'[0m
+[0m[[0m[32msuccess[0m] [0m[0mGenerated .bloop/scala-hw-build.json[0m

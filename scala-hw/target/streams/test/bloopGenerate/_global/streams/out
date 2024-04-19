@@ -1,0 +1,4 @@
+[debug] [scala-hw-test] Classpath dependencies List()
+[debug] [scala-hw-test] Dependencies from configurations List(scala-hw)
+[debug] Bloop wrote the configuration of project 'scala-hw-test' to '/home/mplaczek/Documents/Classes/CSC447/Scala/scala-hw/.bloop/scala-hw-test.json'
+[success] Generated .bloop/scala-hw-test.json
