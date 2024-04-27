@@ -40,8 +40,9 @@ object fp2:
   //
   // Your implementation of "map" MUST be recursive.
   def map[A, B](xs: List[A], f: A => B): List[B] =
-    // TODO: Replace ??? your answer.
-    ???
+    xs match
+      case Nil => Nil // BASE CASE
+      case y :: ys => f(y) :: map(ys, f)
 
   // EXERCISE 2: complete the following recursive definition of a "filter"
   // function for Scala's builtin List type.  You must not use the builtin
@@ -49,8 +50,11 @@ object fp2:
   //
   // Your implementation of "filter" MUST be recursive.
   def filter[A](xs: List[A], f: A => Boolean): List[A] =
-    // TODO: Replace ??? your answer.
-    ???
+    xs match
+      case Nil => Nil // BASE CASE
+      case y :: ys => if f(y) then y :: filter(ys, f) else filter(ys, f) // If pass, filter y by taking y out of filter(ys, f) else just run filter?
+                                                                         // I do not understand the details
+                                                                         // I bet its all because of the keyword "filter"
 
   // EXERCISE 3: complete the following recursive definition of an "append"
   // function for Scala's builtin List type.  You must not use the builtin
@@ -60,8 +64,9 @@ object fp2:
   //
   // HINT: use "::" in the body of the cons-cell case.
   def append[A](xs: List[A], ys: List[A]): List[A] =
-    // TODO: Replace ??? your answer.
-    ???
+    xs match
+      case Nil => ys // BASE CASE
+      case head :: tail => head :: append(tail, ys)
 
   // EXERCISE 4: complete the following recursive definition of a "flatten"
   // function for Scala's builtin List type.  You must not use the builtin
@@ -74,9 +79,15 @@ object fp2:
   //
   // EXAMPLE:
   // - flatten (List ((1 to 5).toList, (6 to 10).toList, (11 to 15).toList)) == (1 to 15).toList
+
+  // This was my thoughts, and I'm leaving it in!
+  // So we are given a List(1,2,3,4,5) and List(6,7,8,9,10)
+  // And the output must be List (1,2,3,4,5,6,7,8,9,10)...but doesnt append() do that?
   def flatten[A](xss: List[List[A]]): List[A] =
-    // TODO: Replace ??? your answer.
-    ???
+    xss match
+      case Nil => Nil // BASE CASE
+      case head :: tail =>  head ::: flatten(tail)
+      // case head :: tail => append(head, flatten(tail)) Can be written like this too, helps me understand better
 
   // EXERCISE 5: complete the following recursive definition of a "foldLeft"
   // function for Scala's builtin list type.  You must not use the builtin
@@ -87,8 +98,9 @@ object fp2:
   // HINT:   foldLeft (  Nil, e, f) == e
   //         foldLeft (y::ys, e, f) == foldLeft (ys, f (e, y), f)
   def foldLeft[A, B](xs: List[A], e: B, f: (B, A) => B): B =
-    // TODO: Replace ??? your answer.
-    ???
+    xs match
+      case Nil => e // BASE CASE
+      case head :: tail => foldLeft(tail, f(e, head), f)
 
   // EXERCISE 6: complete the following recursive definition of a "foldRight"
   // function for Scala's builtin list type.  You must not use the builtin
@@ -99,8 +111,9 @@ object fp2:
   // HINT:   foldRight (  Nil, e, f) == e
   //         foldRight (y::ys, e, f) == f (y, foldRight (ys, e, f))
   def foldRight[A, B](xs: List[A], e: B, f: (A, B) => B): B =
-    // TODO: Replace ??? your answer.
-    ???
+    xs match
+      case Nil => e // BASE CASE
+      case head :: tail => f(head, foldRight(tail, e, f)) // I need more explanation as to why it works this way and not this way: ... => foldRight(tail, f(head, e), f)
 
   // EXERCISE 7: complete the following definition of a "joinTerminateRight"
   // function to take a list of strings "xs" and concatenate all strings
@@ -115,8 +128,7 @@ object fp2:
   // - joinTerminateRight (List ("a"), ";") == "a;"
   // - joinTerminateRight (List ("a","b","c","d"), ";") == "a;b;c;d;"
   def joinTerminateRight(xs: List[String], term: String): String =    
-    // TODO: Replace ??? your answer.
-    ???
+   foldRight(xs, "", (s, acc) => s + term + acc) // I need more explanation for this one 
 
   // EXERCISE 8: complete the following definition of a "joinTerminateLeft"
   // function to take a list of strings "xs" and concatenate all strings
@@ -131,8 +143,7 @@ object fp2:
   // - joinTerminateLeft (List ("a"), ";") == "a;"
   // - joinTerminateLeft (List ("a","b","c","d"), ";") == "a;b;c;d;"
   def joinTerminateLeft(xs: List[String], term: String): String =
-    // TODO: Replace ??? your answer.
-    ???
+    foldLeft(xs, "", (acc, s) => acc + s + term) // I need more explanation for this one
 
   // EXERCISE 9: complete the following recursive definition of a
   // "firstNumGreaterOrEqual" function to find the first number greater than or
@@ -146,8 +157,9 @@ object fp2:
   // EXAMPLES:
   // - firstNumGreaterOrEqual (5, List (4, 6, 8, 5)) == 6
   def firstNumGreaterOrEqual(a: Int, xs: List[Int]): Int =
-    // TODO: Replace ??? your answer.
-    ???
+    xs match
+      case Nil => throw new NoSuchElementException
+      case head :: tail => if head >= a then head else firstNumGreaterOrEqual(a, tail)
 
   // EXERCISE 10: complete the following recursive definition of a
   // "firstIndexNumGreaterOrEqual" function to find the index (position) of the
@@ -165,5 +177,6 @@ object fp2:
   //
   // HINT: this is a bit easier to write if you use an auxiliary function.
   def firstIndexNumGreaterOrEqual(a: Int, xs: List[Int]): Int =
-    // TODO: Replace ??? your answer.
-    ???
+    xs match
+      case Nil => throw new NoSuchElementException
+      case head :: tail => if head >= a then 0 else 1 + firstIndexNumGreaterOrEqual(a, tail) // Call next number so the +1 is needed
