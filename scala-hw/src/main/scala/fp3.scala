@@ -43,9 +43,11 @@ object fp3:
   // EXAMPLES:
   // - member (5, List (4, 6, 8, 5)) == true
   // - member (3, List (4, 6, 8, 5)) == false
-  def member(a: Int, xs: List[Int]): Boolean =
-    // TODO: Replace ??? your answer.
-    ???
+  def member(a: Int, xs: List[Int]): Boolean = xs match
+    case Nil => false
+    case x :: xs =>
+      if x == a then true
+      else member(a, xs)
 
   // EXERCISE 2: complete the following recursive definition of an "allEqual"
   // function to check whether all elements in a list of integers are equal.
@@ -57,9 +59,12 @@ object fp3:
   // - allEqual (List (6, 5, 5, 5)) == false
   // - allEqual (List (5, 5, 6, 5)) == false
   // - allEqual (List (5, 5, 5, 6)) == false
-  def allEqual(xs: List[Int]): Boolean =
-    // TODO: Replace ??? your answer.
-    ???
+  def allEqual(xs: List[Int]): Boolean = xs match
+    case Nil => true
+    case _ :: Nil => true // The List has 1 element
+    case x :: xs => // The List more than 1 element 
+      if x != xs.head then false
+      else allEqual(xs)
 
   // EXERCISE 3: complete the definition of the following function that
   // computes the length of each String in a list, and returns the original
@@ -71,8 +76,7 @@ object fp3:
   //
   // You can use the "map" method of the List class.
   def stringLengths(xs: List[String]): List[(String, Int)] =
-    // TODO: Replace ??? your answer.
-    ???
+    xs.map(x => (x, x.length)) // Takes List[X] and maps that with its length to the List
 
   // EXERCISE 4: complete the function definition for "delete1" that takes
   // an element "x" and a list "ys", then returns the list where any
@@ -83,10 +87,11 @@ object fp3:
   // EXAMPLE:
   // - delete1 ("the", List ("the","the","was","a","product","of","the","1980s"))
   //                == List ("was","a","product","of","1980s")
-  def delete1[X](x: X, ys: List[X]): List[X] =
-    // TODO: Replace ??? your answer.
-    ???
-
+  def delete1[X](x: X, ys: List[X]): List[X] = ys match
+    case Nil => Nil
+    case y :: ys =>
+      if x == y then delete1(x, ys) // Ignores the head value of y
+      else y :: delete1(x, ys) // Includes the head value of y
 
   // EXERCISE 5: complete the function definition for "delete2" below.  It
   // must have the same behavior as "delete1".
@@ -94,8 +99,8 @@ object fp3:
   // It must be written using "for comprehensions" and not use recursion
   // explicitly.
   def delete2[X](x: X, ys: List[X]): List[X] =
-    // TODO: Replace ??? your answer.
-    ???
+    for y <- ys
+      if x != y yield y // I do NOT like how scala complains like a baby if you add a 'then' after the y
 
   // EXERCISE 6: complete the function definition for "delete3" below.  It
   // must have the same behavior as "delete1".
@@ -103,8 +108,7 @@ object fp3:
   // It must be written using the builtin "filter" method for Lists and not
   // use recursion explicitly.
   def delete3[X](x: X, ys: List[X]): List[X] =
-    // TODO: Replace ??? your answer.
-    ???
+    ys.filter(y => y != x)
 
   // EXERCISE 7: complete the function definition for "removeDupes1" below.
   // It takes a list as argument, then returns the same list with consecutive
@@ -116,12 +120,12 @@ object fp3:
   // EXAMPLE:
   // - removeDupes1 (List (1,1,2,3,3,3,4,4,5,6,7,7,8,9,2,2,2,9))
   //              == List (1,2,3,4,5,6,7,8,9,2,9)
-  def removeDupes1[X](xs: List[X]): List[X] =
-    // TODO: Replace ??? your answer.
-    ???
-
-
-
+  def removeDupes1[X](xs: List[X]): List[X] = xs match
+    case Nil => Nil // There is no List
+    case x :: Nil => List(x) // When there is no Y (next value), then create a List (real base case)
+    case x :: y :: xs => // Gets X, then Y is next value of XS
+      if x == y then removeDupes1(y :: xs) // add Y back into xs
+      else x :: removeDupes1(y :: xs) // add Y back into xs
 
   // EXERCISE 8: write a function "removeDupes2" that behaves like
   // "removeDupes1", but also includes a count of the number of consecutive
@@ -132,13 +136,20 @@ object fp3:
   // EXAMPLE:
   // - removeDupes2 (List (1,1,2,3,3,3,4,4,5,6,7,7,8,9,2,2,2,9))
   //              == List ((2,1),(1,2),(3,3),(2,4),(1,5),(1,6),(2,7),(1,8),(1,9),(3,2),(1,9))
-  def removeDupes2[X](xs: List[X]): List[(Int, X)] =
-    // TODO: Replace ??? your answer.
-    ???
+  def removeDupes2[X](xs: List[X]): List[(Int, X)] = xs match
+    case Nil => Nil // There is no List
+    case x :: xs =>
+      def counter(x: X, count: Int, ys: List[X]): List[(Int, X)] = ys match 
+      // I split xs into ys (after I "popped" x)
+      // Makes me understand easier
+        case Nil => List((count, x)) // When no Y, return the counter's List
+        case y :: ys =>
+          if x == y then counter(x, count + 1, ys) // Increment its count
+          else (count, x) :: counter(y, 1, ys) // Ignore it and set its count to 1
+          // This line also starts at y for the next recursive call!
 
-
-
-
+      counter(x, 1, xs) // This line will make sure every X has a counter 
+      // And it starts at 1, because there is an X
 
   // EXERCISE 9: complete the following definition of a function that splits
   // a list into a pair of two lists.  The offset for the the split position
@@ -171,9 +182,16 @@ object fp3:
   //
 
   def splitAt[X](n: Int, xs: List[X]): (List[X], List[X]) =
-    // TODO: Replace ??? your answer.
-    ???
+    // Helper function to use an Accumulator
+    def helper(n: Int, xs: List[X], acc: List[X]): (List[X], List[X]) = xs match
+      case Nil => (acc.reverse, Nil) // If no x, return the Accumulator in reverse (don't forget to add Nil
+      case x :: xs =>
+        if n <= 0 then (acc.reverse, x :: xs)
+        // Returns the Accumulator in reverse, plus the remaining XS (dont forget the X we popped)
+        else helper(n - 1, xs, x :: acc)
+        // Decrements the number, returns the remaining list (XS), and adds X to the Accumulator
 
+    helper(n, xs, Nil) // This line starts helper on every X
 
   // EXERCISE 10: complete the following definition of an "allDistinct"
   // function that checks whether all values in list are distinct.  You
@@ -186,6 +204,8 @@ object fp3:
   // - allDistinct (List (1,2,3,4,5)) == true
   // - allDistinct (List (1,2,3,4,5,1)) == false
   // - allDistinct (List (1,2,3,2,4,5)) == false
-  def allDistinct(xs: List[Int]): Boolean =
-    // TODO: Replace ??? your answer.
-    ???
+  def allDistinct(xs: List[Int]): Boolean = xs match
+    case Nil => true // If no List, then returns true
+    case x :: xs =>
+      if member(x, xs) then false
+      else allDistinct(xs)
