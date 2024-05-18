@@ -123,8 +123,8 @@
             "jars": [
                 "/home/mplaczek/.sbt/boot/scala-2.12.18/lib/scala-library.jar",
                 "/home/mplaczek/.sbt/boot/scala-2.12.18/lib/scala-compiler.jar",
-                "/home/mplaczek/.sbt/boot/scala-2.12.18/lib/scala-xml_2.12-2.1.0.jar",
-                "/home/mplaczek/.sbt/boot/scala-2.12.18/lib/scala-reflect.jar"
+                "/home/mplaczek/.sbt/boot/scala-2.12.18/lib/scala-reflect.jar",
+                "/home/mplaczek/.sbt/boot/scala-2.12.18/lib/scala-xml_2.12-2.1.0.jar"
             ],
             "setup": {
                 "order": "mixed",
@@ -213,7 +213,7 @@
         "platform": {
             "name": "jvm",
             "config": {
-                "home": "/usr/lib/jvm/java-17-openjdk",
+                "home": "/usr/lib/jvm/java-21-openjdk-amd64",
                 "options": [
                     "-Duser.dir=/home/mplaczek/Documents/Classes/CSC447/Scala/scala-hw/project"
                 ]
@@ -222,7 +222,7 @@
                 
             ],
             "runtimeConfig": {
-                "home": "/usr/lib/jvm/java-17-openjdk",
+                "home": "/usr/lib/jvm/java-21-openjdk-amd64",
                 "options": [
                     "-Duser.dir=/home/mplaczek/Documents/Classes/CSC447/Scala/scala-hw/project"
                 ]
